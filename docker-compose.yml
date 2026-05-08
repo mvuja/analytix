@@ -34,7 +34,6 @@ services:
       DB_DATABASE: analytix
       DB_USERNAME: analytix
       DB_PASSWORD: secret
-      APP_KEY: base64:MTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTI=
       QUEUE_CONNECTION: sync
       BROADCAST_CONNECTION: null
       SESSION_DRIVER: cookie
@@ -44,7 +43,7 @@ services:
       - "8000:8000"
     volumes:
       - ./backend:/var/www/html
-    command: sh -c "composer install && php artisan migrate --seed && php artisan serve --host=0.0.0.0 --port=8000"
+    command: sh -c "composer install && (test -f .env || cp .env.example .env) && (grep -q '^APP_KEY=base64:' .env || php artisan key:generate --force --ansi) && php artisan migrate --seed && php artisan serve --host=0.0.0.0 --port=8000"
 
   frontend:
     build:

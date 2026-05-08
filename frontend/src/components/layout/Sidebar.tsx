@@ -32,7 +32,6 @@ export function Sidebar() {
         <div className="flex h-16 items-center justify-between px-5">
           <div>
             <p className="text-lg font-bold text-slate-950 dark:text-white">Analytix</p>
-            <p className="text-xs font-medium text-slate-500">demo-site</p>
           </div>
           <Button variant="ghost" className="px-2 lg:hidden" onClick={() => setSidebarOpen(false)} aria-label="Close sidebar">
             <X size={18} />
