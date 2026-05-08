@@ -1,0 +1,66 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: analytix-postgres
+    environment:
+      POSTGRES_DB: analytix
+      POSTGRES_USER: analytix
+      POSTGRES_PASSWORD: secret
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U analytix -d analytix"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+    container_name: analytix-backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      APP_ENV: local
+      APP_DEBUG: "true"
+      APP_URL: http://localhost:8000
+      FRONTEND_URL: http://localhost:5174
+      DB_CONNECTION: pgsql
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE: analytix
+      DB_USERNAME: analytix
+      DB_PASSWORD: secret
+      APP_KEY: base64:MTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTI=
+      QUEUE_CONNECTION: sync
+      BROADCAST_CONNECTION: null
+      SESSION_DRIVER: cookie
+      SANCTUM_STATEFUL_DOMAINS: localhost:5174,127.0.0.1:5174
+      SESSION_DOMAIN: localhost
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/var/www/html
+    command: sh -c "composer install && php artisan migrate --seed && php artisan serve --host=0.0.0.0 --port=8000"
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: analytix-frontend
+    depends_on:
+      - backend
+    environment:
+      VITE_API_URL: http://localhost:8000
+    ports:
+      - "5174:5173"
+    volumes:
+      - ./frontend:/app
+      - frontend-node-modules:/app/node_modules
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+
+volumes:
+  postgres-data:
+  frontend-node-modules:
