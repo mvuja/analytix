@@ -7,6 +7,9 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class WebsiteResource extends JsonResource
 {
+    /**
+     * Convert backend website fields into frontend-friendly names.
+     */
     public function toArray(Request $request): array
     {
         return [

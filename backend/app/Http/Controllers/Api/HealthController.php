@@ -7,6 +7,9 @@ use Illuminate\Routing\Controller;
 
 class HealthController extends Controller
 {
+    /**
+     * Provide a simple API heartbeat for Docker and manual checks.
+     */
     public function __invoke(): JsonResponse
     {
         return response()->json([

@@ -7,6 +7,9 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
 {
+    /**
+     * Expose only the user fields the dashboard needs.
+     */
     public function toArray(Request $request): array
     {
         return [

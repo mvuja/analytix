@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\PublicTrackingCors;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -12,6 +13,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->alias([
+            'public.tracking.cors' => PublicTrackingCors::class,
+        ]);
+
         $middleware->api(prepend: [
             EnsureFrontendRequestsAreStateful::class,
         ]);

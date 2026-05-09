@@ -7,6 +7,9 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class OverviewResource extends JsonResource
 {
+    /**
+     * Shape the overview response around the dashboard sections.
+     */
     public function toArray(Request $request): array
     {
         return [

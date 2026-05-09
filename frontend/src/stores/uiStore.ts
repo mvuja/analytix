@@ -13,6 +13,7 @@ type UiState = {
   setSidebarOpen: (open: boolean) => void;
 };
 
+// Resolve system preference once before the store is created
 function getSystemTheme(): ResolvedTheme {
   if (typeof window === "undefined") {
     return "light";
@@ -21,6 +22,7 @@ function getSystemTheme(): ResolvedTheme {
   return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 
+// UI state keeps theme and mobile sidebar behavior independent from analytics data
 export const useUiStore = create<UiState>()(
   persist(
     (set) => ({
@@ -38,6 +40,7 @@ export const useUiStore = create<UiState>()(
         }),
       setSystemTheme: (systemTheme) =>
         set((state) => ({
+          // System changes apply only while the user is still following system mode
           resolvedTheme: state.themePreference === "system" ? systemTheme : state.resolvedTheme,
         })),
       setSidebarOpen: (sidebarOpen) => set({ sidebarOpen }),

@@ -39,6 +39,7 @@ services:
       SESSION_DRIVER: cookie
       SANCTUM_STATEFUL_DOMAINS: localhost:5174,127.0.0.1:5174
       SESSION_DOMAIN: localhost
+      TRACKING_ALLOWED_ORIGINS: "*"
     ports:
       - "8000:8000"
     volumes:

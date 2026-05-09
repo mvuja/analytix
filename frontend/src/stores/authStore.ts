@@ -13,6 +13,7 @@ type AuthState = {
   bootstrap: () => Promise<void>;
 };
 
+// Auth state is persisted so a refresh keeps the dashboard session visible
 export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
@@ -42,6 +43,7 @@ export const useAuthStore = create<AuthState>()(
         set({ user: null });
       },
       async bootstrap() {
+        // Bootstrap runs once on app load to verify the server-side session
         if (get().isBootstrapped) return;
         try {
           const user = await authService.me();

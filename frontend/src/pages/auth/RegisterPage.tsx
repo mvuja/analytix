@@ -2,6 +2,7 @@ import { FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../../components/ui/Button";
 import { Input } from "../../components/ui/Input";
+import { getApiErrorMessage } from "../../lib/api";
 import { useAuthStore } from "../../stores/authStore";
 
 export function RegisterPage() {
@@ -19,8 +20,8 @@ export function RegisterPage() {
     try {
       await register({ name, email, password });
       navigate("/overview");
-    } catch {
-      setError("Could not create the account. Check the fields and try again.");
+    } catch (error) {
+      setError(getApiErrorMessage(error, "Could not create the account. Check the fields and try again."));
     }
   }
 

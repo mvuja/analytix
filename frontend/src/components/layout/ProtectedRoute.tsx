@@ -6,6 +6,7 @@ import { useAuthStore } from "../../stores/authStore";
 export function ProtectedRoute({ children }: { children: ReactNode }) {
   const { user, isBootstrapped } = useAuthStore();
 
+  // Wait for /api/auth/me before deciding whether to redirect
   if (!isBootstrapped) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-slate-50 p-6 dark:bg-slate-950">

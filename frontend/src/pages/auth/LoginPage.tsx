@@ -2,6 +2,7 @@ import { FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../../components/ui/Button";
 import { Input } from "../../components/ui/Input";
+import { getApiErrorMessage } from "../../lib/api";
 import { useAuthStore } from "../../stores/authStore";
 
 export function LoginPage() {
@@ -18,8 +19,8 @@ export function LoginPage() {
     try {
       await login({ email, password });
       navigate("/overview");
-    } catch {
-      setError("Unable to sign in with those credentials.");
+    } catch (error) {
+      setError(getApiErrorMessage(error, "Unable to sign in with those credentials."));
     }
   }
 

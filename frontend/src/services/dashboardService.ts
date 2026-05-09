@@ -5,8 +5,10 @@ export type DashboardFilters = {
   siteId?: string;
   from?: string;
   to?: string;
+  timezone?: string;
 };
 
+// Dashboard services mirror the backend REST sections one-to-one
 export const dashboardService = {
   async websites() {
     const { data } = await api.get<{ data: Website[] }>("/api/websites");

@@ -12,8 +12,12 @@ Route::get('/health', HealthController::class);
 Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login', [AuthController::class, 'login']);
 
+// Keep dashboard CORS separate from public tracking
+Route::options('/track', fn () => response('', 204))
+    ->middleware('public.tracking.cors');
+
 Route::post('/track', [TrackingController::class, 'store'])
-    ->middleware('throttle:120,1');
+    ->middleware(['public.tracking.cors', 'throttle:120,1']);
 
 Route::middleware('auth:sanctum')->group(function (): void {
     Route::get('/auth/me', [AuthController::class, 'me']);

@@ -9,6 +9,9 @@ use Illuminate\Routing\Controller;
 
 class TrackingController extends Controller
 {
+    /**
+     * Accept a public tracking event and hand ingestion to the queue layer.
+     */
     public function store(TrackEventRequest $request): JsonResponse
     {
         IngestAnalyticsEvent::dispatch($request->toPayload(), $request->ip(), $request->userAgent());

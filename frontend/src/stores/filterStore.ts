@@ -12,7 +12,12 @@ type FilterState = {
 function isoDate(daysAgo: number) {
   const date = new Date();
   date.setDate(date.getDate() - daysAgo);
-  return date.toISOString().slice(0, 10);
+  // Build filter dates from the local calendar
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
 }
 
 export const useFilterStore = create<FilterState>()(
@@ -26,11 +31,22 @@ export const useFilterStore = create<FilterState>()(
     }),
     {
       name: "analytix-filters",
+      version: 2,
       partialize: (state) => ({
         siteId: state.siteId,
         from: state.from,
         to: state.to,
       }),
+      migrate: (state) => {
+        const previous = state as Partial<FilterState> | null;
+
+        // Refresh persisted ranges when date handling changes
+        return {
+          siteId: previous?.siteId ?? "demo-site",
+          from: isoDate(14),
+          to: isoDate(0),
+        } as FilterState;
+      },
     },
   ),
 );

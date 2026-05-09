@@ -6,6 +6,9 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class RegisterRequest extends FormRequest
 {
+    /**
+     * Validate the first account fields used by the dashboard auth flow.
+     */
     public function rules(): array
     {
         return [

@@ -5,11 +5,22 @@ import { Skeleton } from "../../components/ui/Skeleton";
 export function RealtimePage() {
   const { data, isLoading } = useRealtimeQuery();
 
+  // Include the date because late-night testing can cross dashboard days
+  function formatEventTimestamp(timestamp: string) {
+    return new Intl.DateTimeFormat(undefined, {
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    }).format(new Date(timestamp));
+  }
+
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-slate-950 dark:text-white">Realtime</h1>
-        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Prepared for Reverb-powered live updates, polling every 15 seconds for now.</p>
+        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Prepared for Reverb-powered live updates, polling every 15 seconds.</p>
       </div>
       {isLoading || !data ? (
         <Skeleton className="h-96" />
@@ -39,7 +50,7 @@ export function RealtimePage() {
                       <p className="text-xs text-slate-500">{event.browser} on {event.device}</p>
                     </div>
                   </div>
-                  <span className="whitespace-nowrap text-xs font-medium text-slate-500">{new Date(event.occurred_at).toLocaleTimeString()}</span>
+                  <span className="whitespace-nowrap text-xs font-medium text-slate-500">{formatEventTimestamp(event.occurred_at)}</span>
                 </div>
               ))}
             </div>

@@ -1,5 +1,6 @@
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 import type { DeviceSlice } from "../../types/analytics";
+import { chartTooltipItemStyle, chartTooltipLabelStyle, chartTooltipStyle } from "./chartTooltip";
 
 const colors = ["#34d399", "#60a5fa", "#fb7185", "#f59e0b"];
 
@@ -10,6 +11,7 @@ export function DevicePieChart({ data }: { data: DeviceSlice[] }) {
       <p className="text-sm text-slate-500 dark:text-slate-400">Visitor device mix</p>
       <ResponsiveContainer width="100%" height="82%">
         <PieChart>
+          {/* Position the pie slightly higher so the legend has breathing room */}
           <Pie
             data={data}
             dataKey="value"
@@ -23,7 +25,7 @@ export function DevicePieChart({ data }: { data: DeviceSlice[] }) {
               <Cell key={entry.device} fill={colors[index % colors.length]} />
             ))}
           </Pie>
-          <Tooltip />
+          <Tooltip contentStyle={chartTooltipStyle} labelStyle={chartTooltipLabelStyle} itemStyle={chartTooltipItemStyle} />
           <Legend
             iconType="circle"
             verticalAlign="bottom"

@@ -6,6 +6,9 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class LoginRequest extends FormRequest
 {
+    /**
+     * Validate the credentials needed by Laravel's session guard.
+     */
     public function rules(): array
     {
         return [

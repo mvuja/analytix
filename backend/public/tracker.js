@@ -10,10 +10,12 @@
   var storageKey = "analytix." + siteId + ".visitor";
   var sessionKey = "analytix." + siteId + ".session";
 
+  // Keep generated ids short enough for URLs, logs, and database indexes
   function id(prefix) {
     return prefix + "_" + Math.random().toString(36).slice(2) + Date.now().toString(36);
   }
 
+  // Store ids per site so one browser can test multiple tracked websites
   function getOrSet(key, prefix) {
     var value = localStorage.getItem(key);
     if (!value) {
@@ -38,6 +40,7 @@
     return "desktop";
   }
 
+  // Beacon keeps page navigation fast while still delivering analytics events
   function send(type) {
     var payload = {
       siteId: siteId,
@@ -50,6 +53,7 @@
       screen: window.screen.width + "x" + window.screen.height,
       browser: browserName(),
       device: deviceType(),
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       timestamp: new Date().toISOString()
     };
 
@@ -57,6 +61,7 @@
     navigator.sendBeacon(endpoint, blob);
   }
 
+  // Patch history methods so React and other SPA navigations are visible
   function patchHistory(method) {
     var original = history[method];
     history[method] = function () {
@@ -68,6 +73,7 @@
 
   var lastPath = null;
   function trackPageview() {
+    // Avoid double counting when the router emits repeated navigation events
     if (location.pathname === lastPath) return;
     lastPath = location.pathname;
     send("pageview");

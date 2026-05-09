@@ -117,12 +117,50 @@ The tracker automatically captures:
 - screen size
 - browser
 - device category
+- visitor timezone
 - timestamp
 
 It sends events to:
 
 ```text
 POST /api/track
+```
+
+## CORS and Tracking Safety
+
+Analytix uses two different CORS postures because the dashboard API and the tracking API have different jobs.
+
+Dashboard and auth routes are restricted to the configured frontend origin:
+
+```text
+FRONTEND_URL=http://localhost:5174
+SANCTUM_STATEFUL_DOMAINS=localhost:5174,127.0.0.1:5174
+```
+
+That keeps authenticated endpoints such as `/api/dashboard/overview`, `/api/websites`, and `/api/auth/me` tied to the React dashboard.
+
+Tracking is intentionally more open. The `/api/track` endpoint is designed to receive events from websites where the script is embedded, including local dev sites like `http://localhost:3000` and public sites such as `https://example.com`.
+
+For local development, this is allowed out of the box:
+
+```text
+TRACKING_ALLOWED_ORIGINS=*
+```
+
+This only applies to `POST /api/track` and its preflight request. It does not open the authenticated dashboard API.
+
+The tracking endpoint is safe to expose in the same way most analytics ingestion endpoints are public-facing:
+
+- it does not require or send dashboard credentials
+- it accepts a narrow, validated payload
+- it is rate limited with `throttle:120,1`
+- it stores analytics events, not private user account data
+- malformed requests are rejected before ingestion
+
+For a stricter production deployment, replace `*` with a comma-separated allowlist:
+
+```text
+TRACKING_ALLOWED_ORIGINS=https://myshop.com,https://www.myshop.com
 ```
 
 ## API Endpoints

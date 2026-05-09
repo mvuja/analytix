@@ -9,6 +9,9 @@ use Illuminate\Routing\Controller;
 
 class WebsiteController extends Controller
 {
+    /**
+     * List tracked websites with lightweight counts for the dashboard selector.
+     */
     public function index(): AnonymousResourceCollection
     {
         return WebsiteResource::collection(
