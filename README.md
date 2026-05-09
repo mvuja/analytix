@@ -2,8 +2,6 @@
 
 Analytix is a self-hosted website analytics and KPI dashboard platform built as a production-style full-stack portfolio project. It combines a Laravel API, React dashboard, PostgreSQL storage, Dockerized local development, and an embeddable tracking script.
 
-The product direction is intentionally lightweight: a focused mix of Plausible Analytics, Umami, and PostHog foundations without adding unnecessary platform complexity too early.
-
 ## Architecture
 
 ```text
@@ -93,6 +91,44 @@ The frontend container runs:
 npm install
 npm run dev -- --host 0.0.0.0
 ```
+
+## Hosted Portfolio Demo
+
+The frontend can also run in demo mode for Netlify, Vercel, or any static host. Demo mode is meant for a public portfolio link where recruiters can explore the product UI without requiring a hosted Laravel API, PostgreSQL database, or queue worker.
+
+Enable it with:
+
+```text
+VITE_DEMO_MODE=true
+```
+
+In demo mode:
+
+- authentication uses a local demo user
+- dashboard APIs return curated sample analytics
+- charts, filters, pages, realtime, settings, dark mode, and responsive layout remain interactive
+- no backend requests are required
+- the Settings page explains that real tracker ingestion needs the self-hosted Docker setup
+
+Recommended Vercel settings:
+
+```text
+Root Directory: frontend
+Build Command: npm run build
+Output Directory: dist
+Environment Variable: VITE_DEMO_MODE=true
+```
+
+Recommended Netlify settings:
+
+```text
+Base directory: frontend
+Build command: npm run build
+Publish directory: dist
+Environment variable: VITE_DEMO_MODE=true
+```
+
+The repository still contains the full self-hosted product. Anyone who wants to test real database writes, CORS behavior, and tracker ingestion can clone the repo and run Docker locally.
 
 ## Tracker Usage
 

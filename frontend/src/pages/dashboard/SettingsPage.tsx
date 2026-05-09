@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { Check, Copy } from "lucide-react";
 import { Button } from "../../components/ui/Button";
+import { isDemoMode } from "../../lib/demoMode";
 import { useFilterStore } from "../../stores/filterStore";
 
 export function SettingsPage() {
@@ -31,6 +32,11 @@ export function SettingsPage() {
         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Install the tracking script for the selected website.</p>
       </div>
       <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-panel dark:border-slate-800 dark:bg-slate-900">
+        {isDemoMode && (
+          <div className="mb-5 rounded-md border border-sky-200 bg-sky-50 px-4 py-3 text-sm leading-6 text-sky-800 dark:border-sky-500/30 dark:bg-sky-500/10 dark:text-sky-200">
+            This hosted demo uses sample data. Run the Docker setup from GitHub to test the Laravel API, PostgreSQL database, and tracker ingestion.
+          </div>
+        )}
         <div className="flex items-center justify-between gap-3">
           <div>
             <h2 className="text-base font-semibold text-slate-950 dark:text-white">Tracking script</h2>
